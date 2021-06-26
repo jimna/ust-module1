@@ -2,16 +2,14 @@ package com.ust.person.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
+
 
 @Entity
 public class Person {
@@ -19,13 +17,13 @@ public class Person {
     @Id
     @NotNull(message = "id is mandatory")
     private long id;
-    @NotNull(message = "firstName is mandatory")
+    @NotEmpty(message = "firstName is mandatory")
     @Size(max = 250)
     private String firstName;
-    @NotNull(message = "lastName is mandatory")
+    @NotEmpty(message = "lastName is mandatory")
     @Size(max = 250)
     private String lastName;
-    @NotNull(message = "dob is mandatory in format dd-MM-yyyy")
+    @NotEmpty(message = "dob is mandatory in format dd-MM-yyyy")
     private String dob;
     @NotNull(message = "address is mandatory")
     private Address address;

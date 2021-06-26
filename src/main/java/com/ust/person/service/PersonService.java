@@ -8,6 +8,6 @@ public interface PersonService {
 
     public boolean addPerson(Person person) throws UserAlreadyExistsException;
 
-    Person getUserById(String userId) throws UserNotFoundException;
+    Person manipulateData(String userId) throws UserNotFoundException;
 
 }

@@ -7,7 +7,6 @@ import org.meanbean.test.BeanTester;
 
 class PersonTest {
 
-
     @Test
     public void PersonTest() {
         new BeanTester().testBean(Person.class);

@@ -3,20 +3,26 @@ package com.ust.person.model;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 @Embeddable
 public class Address {
 
-    @Size(max = 250)
+    @Length(max = 250)
+    @NotEmpty
     private String addressLine;
-    @Size(max = 250)
+    @Length(max = 250)
+    @NotEmpty
     private String city;
-    @Size(max = 100)
+    @Length(max = 100)
+    @NotEmpty
     private String state;
     @Length(min =6,max =6)
-    private int pincode;
+    @NotNull
+    private String pincode;
 
-    public Address(String addressLine, String city, String state, int pincode) {
+    public Address(String addressLine, String city, String state, String pincode) {
         this.addressLine = addressLine;
         this.city = city;
         this.state = state;
@@ -50,11 +56,11 @@ public class Address {
         this.state = state;
     }
 
-    public int getPincode() {
+    public String getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(String pincode) {
         this.pincode = pincode;
     }
 
