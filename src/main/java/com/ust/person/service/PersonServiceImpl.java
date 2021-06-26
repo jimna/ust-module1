@@ -11,9 +11,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class PersonServiceImpl implements  PersonService{
 
-    private final String POST_ADD_PERSON = "http://localhost:8085/person/insert";
-    private final String UPDATE_PERSON_BY_ID = "http://localhost:8085/person/update/{id}";
-    private final String DELETE_PERSON_BY_ID ="http://localhost:8085/person/delete/{id}";
+    private final String POST_ADD_PERSON = "http://localhost:8088/person/insert";
+    private final String UPDATE_PERSON_BY_ID = "http://localhost:8088/person/update/{id}";
+    private final String DELETE_PERSON_BY_ID ="http://localhost:8088/person/delete/{id}";
 
     @Autowired
     WebClient.Builder webClientBuilder;
@@ -25,21 +25,21 @@ public class PersonServiceImpl implements  PersonService{
         if(repo.findById(person.getId()).isPresent()){
             throw new UserAlreadyExistsException("User already exist");
         }
-        //repo.save(person);
+//        return repo.save(person);
         return webClientBuilder.build().post().uri(POST_ADD_PERSON).bodyValue(person).retrieve()
                 .bodyToMono(Person.class).block();
     }
 
     @Override
     public Person deletePerson(Long id) throws UserNotFoundException {
-        //repo.deleteById(id);
+        //return repo.deleteById(id);
         return webClientBuilder.build().put().uri(DELETE_PERSON_BY_ID).bodyValue(id).retrieve()
                 .bodyToMono(Person.class).block();
     }
 
     @Override
     public Person updatePerson(Long id) throws UserNotFoundException {
-        return webClientBuilder.build().post().uri(UPDATE_PERSON_BY_ID).bodyValue(id).retrieve()
+        return webClientBuilder.build().put().uri(UPDATE_PERSON_BY_ID).bodyValue(id).retrieve()
                 .bodyToMono(Person.class).block();
     }
 }
