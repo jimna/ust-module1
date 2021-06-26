@@ -15,17 +15,17 @@ import java.util.Date;
 public class Person {
 
     @Id
-    @NotNull(message = "id is mandatory")
+    @NotNull(message = "ID is mandatory")
     private long id;
-    @NotEmpty(message = "firstName is mandatory")
+    @NotEmpty(message = "FirstName is mandatory")
     @Size(max = 250)
     private String firstName;
-    @NotEmpty(message = "lastName is mandatory")
+    @NotEmpty(message = "LastName is mandatory")
     @Size(max = 250)
     private String lastName;
-    @NotEmpty(message = "dob is mandatory in format dd-MM-yyyy")
+    @NotEmpty(message = "DOB is mandatory in format dd-MM-yyyy")
     private String dob;
-    @NotNull(message = "address is mandatory")
+    @NotNull(message = "Address is mandatory")
     private Address address;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date creationDate;
