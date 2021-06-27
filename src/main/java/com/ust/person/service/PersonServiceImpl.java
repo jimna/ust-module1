@@ -25,9 +25,9 @@ public class PersonServiceImpl implements  PersonService{
         if(repo.findById(person.getId()).isPresent()){
             throw new UserAlreadyExistsException("User already exist");
         }
-        return repo.save(person);
-//        return webClientBuilder.build().post().uri(POST_ADD_PERSON).bodyValue(person).retrieve()
-//                .bodyToMono(Person.class).block();
+        //return repo.save(person);
+        return webClientBuilder.build().post().uri(POST_ADD_PERSON).bodyValue(person).retrieve()
+                .bodyToMono(Person.class).block();
     }
 
     @Override

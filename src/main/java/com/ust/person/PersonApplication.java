@@ -26,7 +26,7 @@ public class PersonApplication {
 
 		infoBuilder.title("Person Service")
 				.version("1.0")
-				.license("CopyRight")
+				.license("Copyright(c)")
 				.description("Person Data Store");
 
 		return infoBuilder.build();

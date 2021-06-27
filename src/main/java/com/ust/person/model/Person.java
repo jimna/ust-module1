@@ -25,7 +25,6 @@ public class Person {
     private String lastName;
     @NotEmpty(message = "DOB is mandatory in format dd-MM-yyyy")
     private String dob;
-    @NotNull(message = "Address is mandatory")
     private Address address;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date creationDate;
@@ -33,13 +32,13 @@ public class Person {
     public Person() {
     }
 
-    public Person(long id, String firstName, String lastName, String dob, Address address, Date creationDate) {
+    public Person(long id, String firstName, String lastName, String dob, Address address) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.address = address;
-        this.creationDate = creationDate;
+
     }
 
 

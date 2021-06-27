@@ -23,7 +23,7 @@ public class PersonController {
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
         try {
             service.addPerson(person);
-            return new ResponseEntity<String>("created", HttpStatus.OK);
+            return new ResponseEntity<Person>(service.addPerson(person), HttpStatus.OK);
         } catch (UserAlreadyExistsException ae) {
             return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
         }
