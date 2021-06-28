@@ -5,6 +5,7 @@ import com.ust.person.exception.UserNotFoundException;
 import com.ust.person.model.Person;
 import com.ust.person.service.PersonService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,30 +21,29 @@ public class PersonController {
     PersonService service;
 
     @PostMapping("/add")
+    @ApiOperation("Add a Person Details")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
         try {
-            service.addPerson(person);
             return new ResponseEntity<Person>(service.addPerson(person), HttpStatus.OK);
         } catch (UserAlreadyExistsException ae) {
             return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
         }
     }
 
-    @PutMapping("/manipulate/delete")
-    public ResponseEntity<?> deleteData(@Valid @PathVariable() Long id){
+    @PutMapping("/manipulate")
+    @ApiOperation("Update or Delete data")
+    public ResponseEntity<?> manipulateData(@Valid @PathVariable() Long id,@PathVariable() String operation){
         try{
-            service.deletePerson(id);
-            return new ResponseEntity<String>("Deleted", HttpStatus.OK);
-        }catch (UserNotFoundException ue){
-            return new ResponseEntity<String>("User Not Found", HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @PutMapping("/manipulate/update")
-    public ResponseEntity<?> updateData(@Valid @PathVariable() Long id){
-        try{
-            service.updatePerson(id);
-            return new ResponseEntity<String>("Updated", HttpStatus.OK);
+            if(operation.equalsIgnoreCase("delete")){
+                service.deletePerson(id);
+                return new ResponseEntity<String>("Success", HttpStatus.OK);
+            }
+            else if(operation.equalsIgnoreCase("update")) {
+                service.updatePerson(id);
+                return new ResponseEntity<String>("Success", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<String>("Invalid Operation", HttpStatus.NOT_ACCEPTABLE);
+            }
         }catch (UserNotFoundException ue){
             return new ResponseEntity<String>("User Not Found", HttpStatus.FORBIDDEN);
         }

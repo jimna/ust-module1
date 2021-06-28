@@ -1,20 +1,20 @@
 package com.ust.person.model;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
-@Entity
 public class Person {
 
-    @Id
+
     @NotNull(message = "ID is mandatory")
     private long id;
     @NotEmpty(message = "FirstName is mandatory")
@@ -23,20 +23,23 @@ public class Person {
     @NotEmpty(message = "LastName is mandatory")
     @Size(max = 250)
     private String lastName;
-    @NotEmpty(message = "DOB is mandatory in format dd-MM-yyyy")
-    private String dob;
-    private Address address;
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private Date creationDate;
+    @DateTimeFormat(pattern="dd-MM-yyyy")
+    @NotNull
+    private Date dateOfBirth;
+    @Valid
+    private List<Address> address;
+    @DateTimeFormat(pattern="dd-MM-yy")
+    @NotNull
+    private Date createDate;
 
     public Person() {
     }
 
-    public Person(long id, String firstName, String lastName, String dob, Address address) {
+    public Person(long id, String firstName, String lastName, Date dateOfBirth, List<Address> address) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dob = dob;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
 
     }
@@ -66,28 +69,28 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getDob() {
-        return dob;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override
@@ -96,9 +99,9 @@ public class Person {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", dob='" + dob + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address=" + address +
-                ", creationDate=" + creationDate +
+                ", createDate=" + createDate +
                 '}';
     }
 }
