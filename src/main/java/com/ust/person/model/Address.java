@@ -2,11 +2,11 @@ package com.ust.person.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Embeddable;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-@Embeddable
+
 public class Address {
 
     @Length(max = 250)

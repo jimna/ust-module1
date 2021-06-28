@@ -6,8 +6,12 @@ import com.ust.person.model.Person;
 
 public interface PersonService {
 
-    public boolean addPerson(Person person) throws UserAlreadyExistsException;
-
-    Person manipulateData(String userId) throws UserNotFoundException;
+    public Person addPerson(Person person) throws UserAlreadyExistsException;
+    
+    Person updatePerson(Person person) throws UserNotFoundException;
+    
+    public String deletePerson(String id) throws UserNotFoundException;
+    
+    
 
 }

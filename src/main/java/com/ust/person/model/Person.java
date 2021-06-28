@@ -3,18 +3,15 @@ package com.ust.person.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 
-@Entity
-public class Person {
 
-    @Id
+public class Person {
     @NotNull(message = "id is mandatory")
     private long id;
     @NotEmpty(message = "firstName is mandatory")
