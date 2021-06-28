@@ -8,9 +8,9 @@ public interface PersonService {
 
     public Person addPerson(Person person) throws UserAlreadyExistsException;
     
-    Person updatePerson(Person person) throws UserNotFoundException;
+    boolean updatePerson(Long id) throws UserNotFoundException;
     
-    public String deletePerson(String id) throws UserNotFoundException;
+    public boolean deletePerson(Long id) throws UserNotFoundException;
     
     
 

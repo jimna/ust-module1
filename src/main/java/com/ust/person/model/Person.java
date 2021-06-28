@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -23,24 +24,34 @@ public class Person {
     @NotEmpty(message = "dob is mandatory in format dd-MM-yyyy")
     private String dob;
     @NotNull(message = "address is mandatory")
-    private Address address;
+    private List<Address> address;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date creationDate;
 
     public Person() {
     }
 
-    public Person(long id, String firstName, String lastName, String dob, Address address, Date creationDate) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dob = dob;
-        this.address = address;
-        this.creationDate = creationDate;
-    }
+   
 
 
-    public long getId() {
+    public Person(@NotNull(message = "id is mandatory") long id,
+			@NotEmpty(message = "firstName is mandatory") @Size(max = 250) String firstName,
+			@NotEmpty(message = "lastName is mandatory") @Size(max = 250) String lastName,
+			@NotEmpty(message = "dob is mandatory in format dd-MM-yyyy") String dob,
+			@NotNull(message = "address is mandatory") List<Address> address, Date creationDate) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dob = dob;
+		this.address = address;
+		this.creationDate = creationDate;
+	}
+
+
+
+
+	public long getId() {
         return id;
     }
 
@@ -71,16 +82,18 @@ public class Person {
     public void setDob(String dob) {
         this.dob = dob;
     }
+    public List<Address> getAddress() {
+		return address;
+	}
 
-    public Address getAddress() {
-        return address;
-    }
+	public void setAddress(List<Address> address) {
+		this.address = address;
+	}
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
-    public Date getCreationDate() {
+
+
+	public Date getCreationDate() {
         return creationDate;
     }
 
