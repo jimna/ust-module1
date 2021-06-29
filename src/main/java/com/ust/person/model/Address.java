@@ -5,11 +5,13 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Address {
 
-    @Length(max = 250)
+    
+	@Length(max = 250)
     @NotEmpty
     private String addressLine;
     @Length(max = 250)
@@ -18,18 +20,23 @@ public class Address {
     @Length(max = 100)
     @NotEmpty
     private String state;
-    @Length(min =6,max =6)
-    @NotNull
-    private String pincode;
+    @NotNull(message = "Pincode is mandatory")
+	@Pattern(regexp = "^[1-9]{1}[0-9]{2}\\\\s{0, 1}[0-9]{3}$")
+	private int pinCode;
 
-    public Address(String addressLine, String city, String state, String pincode) {
-        this.addressLine = addressLine;
-        this.city = city;
-        this.state = state;
-        this.pincode = pincode;
-    }
+    
 
-    public Address() {
+    public Address(@Length(max = 250) @NotEmpty String addressLine, @Length(max = 250) @NotEmpty String city,
+			@Length(max = 100) @NotEmpty String state,
+			@NotNull(message = "pin") @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\\\s{0, 1}[0-9]{3}$") int pinCode) {
+		super();
+		this.addressLine = addressLine;
+		this.city = city;
+		this.state = state;
+		this.pinCode = pinCode;
+	}
+
+	public Address() {
     }
 
     public String getAddressLine() {
@@ -55,22 +62,19 @@ public class Address {
     public void setState(String state) {
         this.state = state;
     }
+    public int getPinCode() {
+		return pinCode;
+	}
 
-    public String getPincode() {
-        return pincode;
-    }
+	public void setPinCode(int pinCode) {
+		this.pinCode = pinCode;
+	}
 
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
+	@Override
+	public String toString() {
+		return "Address [addressLine=" + addressLine + ", city=" + city + ", state=" + state + ", pinCode=" + pinCode
+				+ "]";
+	}
 
-    @Override
-    public String toString() {
-        return "Address{" +
-                "addressLine='" + addressLine + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", pincode=" + pincode +
-                '}';
-    }
+	
 }

@@ -21,35 +21,31 @@ public class Person {
     @NotEmpty(message = "lastName is mandatory")
     @Size(max = 250)
     private String lastName;
-    @NotEmpty(message = "dob is mandatory in format dd-MM-yyyy")
-    private String dob;
+    @NotNull(message = "date of birth is mandatory")
+	@JsonFormat(pattern = "dd-mm-yyyy")
+	private Date dateOfBirth;
     @NotNull(message = "address is mandatory")
-    private List<Address> address;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    private Address address;
+    @NotNull
+    @JsonFormat(pattern="dd-mm-yyyy")
     private Date creationDate;
 
     public Person() {
     }
-
-   
-
-
-    public Person(@NotNull(message = "id is mandatory") long id,
+	
+	public Person(@NotNull(message = "id is mandatory") long id,
 			@NotEmpty(message = "firstName is mandatory") @Size(max = 250) String firstName,
 			@NotEmpty(message = "lastName is mandatory") @Size(max = 250) String lastName,
-			@NotEmpty(message = "dob is mandatory in format dd-MM-yyyy") String dob,
-			@NotNull(message = "address is mandatory") List<Address> address, Date creationDate) {
+			@NotNull(message = "date of birth is mandatory") Date dateOfBirth,
+			@NotNull(message = "address is mandatory") Address address, @NotNull Date creationDate) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.dob = dob;
+		this.dateOfBirth = dateOfBirth;
 		this.address = address;
 		this.creationDate = creationDate;
 	}
-
-
-
 
 	public long getId() {
         return id;
@@ -75,23 +71,20 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-    public List<Address> getAddress() {
+    public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+	
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(List<Address> address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
-
-
-
 
 	public Date getCreationDate() {
         return creationDate;
@@ -100,16 +93,11 @@ public class Person {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
+				+ dateOfBirth + ", address=" + address + ", creationDate=" + creationDate + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", dob='" + dob + '\'' +
-                ", address=" + address +
-                ", creationDate=" + creationDate +
-                '}';
-    }
+    
 }
