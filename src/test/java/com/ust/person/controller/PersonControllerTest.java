@@ -68,7 +68,7 @@ class PersonControllerTest {
         }
 
         Address add=new Address("MG Road","Banglore","Karnataka",123456);
-        person=new Person(11,"Albert","shibu",dob,address);
+        person=new Person(11,"Albert","shibu",dob,address );
 
     }
     @Test

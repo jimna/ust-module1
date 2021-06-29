@@ -2,6 +2,7 @@ package com.ust.person.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
@@ -16,26 +17,26 @@ public class Person {
 
 
     @NotNull(message = "ID is mandatory")
-    private long id;
+    private int id;
     @NotEmpty(message = "FirstName is mandatory")
     @Size(max = 250)
     private String firstName;
     @NotEmpty(message = "LastName is mandatory")
     @Size(max = 250)
     private String lastName;
-    @DateTimeFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd-MM-yyyy")
     @NotNull
     private Date dateOfBirth;
     @Valid
     private List<Address> address;
-    @DateTimeFormat(pattern="dd-MM-yy")
+    @JsonFormat(pattern="dd-MM-yy")
     @NotNull
     private Date createDate;
 
     public Person() {
     }
 
-    public Person(long id, String firstName, String lastName, Date dateOfBirth, List<Address> address) {
+    public Person(int id, String firstName, String lastName, Date dateOfBirth, List<Address> address) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,11 +46,11 @@ public class Person {
     }
 
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

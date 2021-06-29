@@ -24,7 +24,10 @@ public class PersonController {
     @ApiOperation("Add a Person Details")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
         try {
-            return new ResponseEntity<Person>(service.addPerson(person), HttpStatus.OK);
+            if(service.addPerson(person)) {
+                return new ResponseEntity<String>("Created", HttpStatus.OK);
+            }
+            return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
         } catch (UserAlreadyExistsException ae) {
             return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
         }
@@ -32,7 +35,7 @@ public class PersonController {
 
     @PutMapping("/manipulate")
     @ApiOperation("Update or Delete data")
-    public ResponseEntity<?> manipulateData(@Valid @PathVariable() Long id,@PathVariable() String operation){
+    public ResponseEntity<?> manipulateData(@Valid @PathVariable() int id,@PathVariable() String operation){
         try{
             if(operation.equalsIgnoreCase("delete")){
                 service.deletePerson(id);

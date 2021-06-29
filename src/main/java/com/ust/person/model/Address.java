@@ -17,7 +17,6 @@ public class Address {
     @NotEmpty(message = "State is mandatory")
     private String state;
     @Min(6)
-    @Max(6)
     @NotNull(message = "Pincode is mandatory and must contain 6 digits")
     private int pincode;
 
