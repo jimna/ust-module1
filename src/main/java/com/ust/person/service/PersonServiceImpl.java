@@ -27,30 +27,35 @@ public class PersonServiceImpl implements  PersonService{
     private String POST_ADD_PERSON_URI;
 
     @Override
-    public Person addPerson(Person person) throws UserAlreadyExistsException {
-    	 Map<String, Long> params = new HashMap<String, Long>();
-    	    params.put("id", 1L);
-    	ResponseEntity<Person> resp = restTemplate.getForEntity(POST_GET_PERSON_URI, Person.class,params);
-    	if(resp.getStatusCode().equals(HttpStatus.OK)) {
-    		throw new UserAlreadyExistsException("Person Already exists!");
-    	}
-    	restTemplate.postForObject(POST_ADD_PERSON_URI, person,Person.class);
-        return person;
+    public boolean addPerson(Person person) throws UserAlreadyExistsException {
+//    	ResponseEntity<Person> resp = restTemplate.getForEntity(POST_GET_PERSON_URI, Person.class,person.getId());
+//    	if(resp.getStatusCode().equals(HttpStatus.EXPECTATION_FAILED)) {
+//    		throw new UserAlreadyExistsException("Person Already exists!");
+//    	}else {
+    	ResponseEntity<Person> resp =	restTemplate.postForEntity(POST_ADD_PERSON_URI, person,Person.class);
+    	System.out.println(resp);
+    	
+    	
+//    	}
+    	
+        return true;
     }
     @Value("${PUTUPDATEPERSON.url}")
     private String PUT_UPDATE_PERSON_URI;
     @Override
-	public boolean updatePerson(Long id) throws UserNotFoundException {
-    	Map<String, Long> params = new HashMap<String, Long>();
-	    params.put("id", 1L);
-		restTemplate.put(PUT_UPDATE_PERSON_URI, Person.class,params);
+	public boolean updatePerson(Person person,Integer id) throws UserNotFoundException {
+    	Map<String, Integer> params = new HashMap<String, Integer>();
+	    params.put("id", id);
+		restTemplate.put(PUT_UPDATE_PERSON_URI,person,params);
 		return true;
 	}
     @Value("${PUTDELETEPERSON.url}")
     private String PUT_DELETE_PERSON_URI;
 	@Override
-	public boolean deletePerson(Long id) throws UserNotFoundException {
-		restTemplate.put(PUT_DELETE_PERSON_URI, Person.class);
+	public boolean deletePerson(Integer id) throws UserNotFoundException {
+		Map<String, Integer> params = new HashMap<String, Integer>();
+	    params.put("id", id);
+		restTemplate.put(PUT_DELETE_PERSON_URI, Person.class,params);
 		return true;
 		}
 

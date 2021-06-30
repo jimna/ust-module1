@@ -22,7 +22,9 @@ public class PersonController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
+    	
         try {
+        	System.out.println("conadd");
             service.addPerson(person);
             return new ResponseEntity<String>("Person Created", HttpStatus.OK);
         } catch (UserAlreadyExistsException ae) {
@@ -30,15 +32,16 @@ public class PersonController {
         }
     }
 
-    @PutMapping("/manipulate")
-    public ResponseEntity<?> manipulateData(@Valid @PathVariable() Long id,@PathVariable() String operation){
+    @PutMapping("/manipulate/{id}/{operation}")
+    public ResponseEntity<?> manipulateData(@Valid @RequestBody Person person, @PathVariable() Integer id,@PathVariable() String operation){
+    	System.out.println("condel");
     	   try{
                if(operation.equalsIgnoreCase("delete")){
                    service.deletePerson(id);
                    return new ResponseEntity<String>("Deleted Successfully", HttpStatus.OK);
                }
                else if(operation.equalsIgnoreCase("update")) {
-                   service.updatePerson(id);
+                   service.updatePerson(person, id);
                    return new ResponseEntity<String>("Updated", HttpStatus.OK);
                }else{
                    return new ResponseEntity<String>("Invalid Operation", HttpStatus.NOT_ACCEPTABLE);
