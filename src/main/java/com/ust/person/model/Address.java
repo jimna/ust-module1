@@ -16,11 +16,11 @@ public class Address {
     @Length(max = 100)
     @NotEmpty(message = "State is mandatory")
     private String state;
-    @Min(6)
     @NotNull(message = "Pincode is mandatory and must contain 6 digits")
-    private int pincode;
+   // @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\\\s{0, 1}[0-9]{3}$")
+    private Integer pincode;
 
-    public Address(String addressLine, String city, String state, int pincode) {
+    public Address(String addressLine, String city, String state, Integer pincode) {
         this.addressLine = addressLine;
         this.city = city;
         this.state = state;
@@ -54,11 +54,11 @@ public class Address {
         this.state = state;
     }
 
-    public int getPincode() {
+    public Integer getPincode() {
         return pincode;
     }
 
-    public void setPincode(int pincode) {
+    public void setPincode(Integer pincode) {
         this.pincode = pincode;
     }
 
