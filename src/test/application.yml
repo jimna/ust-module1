@@ -1,14 +1,15 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/person?useSSL=false
-    username: root
-    password: Albert.98
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
 server:
   port: 8082
+
+
+addPerson:
+  url: http://localhost:8088/person/insert
+
+findPerson:
+  url: http://localhost:8088/person/{id}
+
+updatePerson:
+  url: http://localhost:8088/person/update/{id}
+
+deletePerson:
+  url: http://localhost:8088/person/delete/{id}

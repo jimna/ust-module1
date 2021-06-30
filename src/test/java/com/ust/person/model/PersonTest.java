@@ -3,11 +3,14 @@ package com.ust.person.model;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 class PersonTest {
-    Address add=new Address("abc","cde","fdg",123456);
-    Person person=new Person(11,"Albert","shibu","12-12-1998",add);
 
     @Test
     public void PersonTest() {

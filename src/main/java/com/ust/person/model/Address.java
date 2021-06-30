@@ -2,24 +2,22 @@ package com.ust.person.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Embeddable;
 import javax.validation.constraints.*;
 
-@Embeddable
+
 public class Address {
 
     @Length(max = 250)
-    @NotEmpty(message = "addressLine is mandatory")
+    @NotEmpty(message = "AddressLine is mandatory")
     private String addressLine;
     @Length(max = 250)
-    @NotEmpty(message = "city is mandatory")
+    @NotEmpty(message = "City is mandatory")
     private String city;
     @Length(max = 100)
-    @NotEmpty(message = "state is mandatory")
+    @NotEmpty(message = "State is mandatory")
     private String state;
     @Min(6)
-    @Max(6)
-    @NotNull(message = "Pincode is mandatory")
+    @NotNull(message = "Pincode is mandatory and must contain 6 digits")
     private int pincode;
 
     public Address(String addressLine, String city, String state, int pincode) {

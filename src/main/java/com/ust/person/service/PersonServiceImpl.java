@@ -3,43 +3,67 @@ package com.ust.person.service;
 import com.ust.person.exception.UserAlreadyExistsException;
 import com.ust.person.exception.UserNotFoundException;
 import com.ust.person.model.Person;
-import com.ust.person.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class PersonServiceImpl implements  PersonService{
 
-    private final String POST_ADD_PERSON = "http://localhost:8088/person/insert";
-    private final String UPDATE_PERSON_BY_ID = "http://localhost:8088/person/update/{id}";
-    private final String DELETE_PERSON_BY_ID ="http://localhost:8088/person/delete/{id}";
+    @Value("${addPerson.url}")
+    private String POST_ADD_PERSON;
+    @Value("${updatePerson.url}")
+    private String UPDATE_PERSON_BY_ID;
+    @Value("${deletePerson.url}")
+    private String DELETE_PERSON_BY_ID;
+    @Value("${findPerson.url}")
+    private String FIND_PERSON_BY_ID;
 
     @Autowired
-    WebClient.Builder webClientBuilder;
+    RestTemplate restTemplate;
 
-    @Autowired
-    PersonRepository repo;
     @Override
-    public Person addPerson(Person person) throws UserAlreadyExistsException {
-        if(repo.findById(person.getId()).isPresent()){
-            throw new UserAlreadyExistsException("User already exist");
+    public boolean addPerson(Person person) throws UserAlreadyExistsException {
+        ResponseEntity<String> response = restTemplate.getForEntity(FIND_PERSON_BY_ID , String.class,person.getId());
+        HttpStatus status = response.getStatusCode();
+        if (status.equals(HttpStatus.OK)) {
+            return false;
+        }else{
+            restTemplate.put(POST_ADD_PERSON ,Person.class);
+            return true;
+            }
+
+
+    }
+
+    @Override
+    public boolean deletePerson(int id) throws UserNotFoundException {
+        try {
+            Map<String, Integer> params = new HashMap<String, Integer>();
+            params.put("id", id);
+            restTemplate.put(DELETE_PERSON_BY_ID , Person.class,params);
+            return true;
+        }catch(NoSuchElementException ue){
+            throw new UserNotFoundException("User Not Found");
         }
-        //return repo.save(person);
-        return webClientBuilder.build().post().uri(POST_ADD_PERSON).bodyValue(person).retrieve()
-                .bodyToMono(Person.class).block();
     }
 
     @Override
-    public Person deletePerson(Long id) throws UserNotFoundException {
-        //return repo.deleteById(id);
-        return webClientBuilder.build().put().uri(DELETE_PERSON_BY_ID).bodyValue(id).retrieve()
-                .bodyToMono(Person.class).block();
-    }
-
-    @Override
-    public Person updatePerson(Long id) throws UserNotFoundException {
-        return webClientBuilder.build().put().uri(UPDATE_PERSON_BY_ID).bodyValue(id).retrieve()
-                .bodyToMono(Person.class).block();
+    public boolean updatePerson(int id) throws UserNotFoundException {
+        try {
+            Map<String, Integer> params = new HashMap<String, Integer>();
+            params.put("id", id);
+            restTemplate.put(UPDATE_PERSON_BY_ID+id ,Person.class,params);
+            return true;
+        }catch(NoSuchElementException ue){
+            throw new UserNotFoundException("User Not Found");
+        }
     }
 }
