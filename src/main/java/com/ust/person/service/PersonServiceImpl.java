@@ -59,15 +59,43 @@ public class PersonServiceImpl implements PersonService {
 	public boolean deletePerson(Integer id) throws UserNotFoundException {
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", id);
-		restTemplate.put(DELETE_PERSON_BY_ID, Person.class, params);
-		return true;
+		RestTemplate restTemplate1 = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		String body = "{}";
+		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
+
+		String uid = "" + id + "";
+		ResponseEntity<String> responseEntity = restTemplate1.exchange(FIND_PERSON_BY_ID + uid, HttpMethod.GET,
+				requestEntity, String.class);
+
+		if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
+			restTemplate.put(DELETE_PERSON_BY_ID, Person.class, params);
+			return true;
+		}else if(responseEntity.getStatusCode() == HttpStatus.OK){
+			return false;
+		}
+		return false;
 	}
 
 	@Override
 	public Person updatePerson(Integer id, Person person) throws UserNotFoundException {
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", id);
-		restTemplate.put(UPDATE_PERSON_BY_ID, person, params);
-		return person;
+		RestTemplate restTemplate1 = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		String body = "{}";
+		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
+
+		String uid = "" + id + "";
+		ResponseEntity<String> responseEntity = restTemplate1.exchange(FIND_PERSON_BY_ID + uid, HttpMethod.GET,
+				requestEntity, String.class);
+
+		if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
+			restTemplate.put(UPDATE_PERSON_BY_ID, person, params);
+			return person;
+		}else if(responseEntity.getStatusCode() == HttpStatus.OK){
+			return null;
+		}
+		return null;
 	}
 }

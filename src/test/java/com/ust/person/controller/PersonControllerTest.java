@@ -58,18 +58,24 @@ class PersonControllerTest {
     }
 
     @Test
-    void deleteData() throws Exception {
+    void deleteDataTest() throws Exception {
 
         when(service.deletePerson(person.getId())).thenReturn(true);
         mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/delete").contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void deleteDataFailureTest() throws Exception {
+        when(service.deletePerson(person.getId())).thenReturn(false);
+        mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/delete").contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 
     @Test
-    void updateData() throws Exception {
+    void updateDataFailureTest() throws Exception {
         when(service.updatePerson(person.getId(), person)).thenReturn(person);
         mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/update").contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isOk());
+                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
 }
