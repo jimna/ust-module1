@@ -49,8 +49,8 @@ public class PersonServiceImpl implements PersonService {
 			ResponseEntity<String> response = restTemplate.postForEntity(POST_ADD_PERSON, person, String.class);
 			return response.getBody();
 		}
-		if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
-			return "person already exist";
+		else if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
+			return "Person Already Exist";
 		}
 		return null;
 	}
@@ -59,14 +59,8 @@ public class PersonServiceImpl implements PersonService {
 	public boolean deletePerson(Integer id) throws UserNotFoundException {
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", id);
-		try {
-			restTemplate.put(DELETE_PERSON_BY_ID, Person.class, params);
-			return true;
-		} catch (Exception e) {
-			throw new UserNotFoundException("User Not Found");
-
-		}
-
+		restTemplate.put(DELETE_PERSON_BY_ID, Person.class, params);
+		return true;
 	}
 
 	@Override

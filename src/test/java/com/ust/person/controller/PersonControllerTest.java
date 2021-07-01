@@ -1,112 +1,100 @@
 package com.ust.person.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ust.person.exception.UserAlreadyExistsException;
+import com.google.gson.Gson;
 import com.ust.person.model.Address;
 import com.ust.person.model.Person;
 import com.ust.person.service.PersonService;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+//@RunWith(SpringRunner.class)
+//@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 class PersonControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
-    @Mock
-    PersonService service;
+    private MockMvc mock;
+
+    @MockBean
+    private PersonService service;
+
     @InjectMocks
-    PersonController controller;
+    private PersonController controller;
+
     private Person person;
-    Date dob;
-    List<Address> address=new ArrayList<Address>();
+    String dob;
+    List<Address> address = new ArrayList<Address>();
 
     public void setAddress(List<Address> address) {
-        address.add(new Address("MG Road","Banglore","Karnataka",123456));
+        address.add(new Address("MG Road", "Banglore", "Karnataka", 123456));
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        String date="12-12-1998";
-
-        {
-            try {
-                dob = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Address add=new Address("MG Road","Banglore","Karnataka",123456);
-        person=new Person(11,"Albert","shibu",dob,address );
-
-    }
-    @Test
-    void addPersonTest() throws Exception {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            when(service.addPerson(person)).thenThrow(UserAlreadyExistsException.class);
-            mockMvc.perform(post("/person/insert").contentType(MediaType.APPLICATION_JSON).content(asJsonString(person)))
-                    .andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
-        });
+        person = new Person(11, "Albert", "shibu", "12-12-1998", address, "12-12-21");
 
     }
 
     @Test
-    void deleteData(){
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            when(service.deletePerson(person.getId())).thenReturn(true);
-            mockMvc.perform(post("/person/manipulate").contentType(MediaType.APPLICATION_JSON).content(asJsonString(person)))
-                    .andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
-        });
+    void deleteData() throws Exception {
+
+        when(service.deletePerson(person.getId())).thenReturn(true);
+        mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/delete").contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void updateData(){
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            when(service.deletePerson(person.getId())).thenReturn(true);
-            mockMvc.perform(post("/person/manipulate").contentType(MediaType.APPLICATION_JSON).content(asJsonString(person)))
-                    .andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
-        });
+    void updateData() throws Exception {
+        when(service.updatePerson(person.getId(), person)).thenReturn(person);
+        mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/update").contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isOk());
+
     }
-
-
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @Test
+//    void addPersonTest() throws Exception {
+//        //person=new Person(11,"Albert","shibu", "12-12-1998",address,"12-12-21");
+//        when(service.addPerson(person)).thenReturn("Created");
+//        mock.perform(MockMvcRequestBuilders.post("/api/person/add").contentType(MediaType.APPLICATION_JSON)
+//                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isCreated());
+//
+//    }
+

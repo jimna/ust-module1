@@ -7,24 +7,25 @@ import javax.validation.constraints.*;
 
 public class Address {
 
-    @Length(max = 250)
+    @Size(max = 250)
     @NotEmpty(message = "AddressLine is mandatory")
     private String addressLine;
-    @Length(max = 250)
+    @Size(max = 250)
     @NotEmpty(message = "City is mandatory")
     private String city;
-    @Length(max = 100)
+    @Size(max = 100)
     @NotEmpty(message = "State is mandatory")
     private String state;
     @NotNull(message = "Pincode is mandatory and must contain 6 digits")
-   // @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\\\s{0, 1}[0-9]{3}$")
-    private Integer pincode;
+    @Min(value = 100000,message ="Pincode  must contain minimum 6 digits" )
+    @Max(value = 999999,message ="Pincode must contain maximum 6 digits" )
+    private Integer pinCode;
 
-    public Address(String addressLine, String city, String state, Integer pincode) {
+    public Address(String addressLine, String city, String state, Integer pinCode) {
         this.addressLine = addressLine;
         this.city = city;
         this.state = state;
-        this.pincode = pincode;
+        this.pinCode = pinCode;
     }
 
     public Address() {
@@ -54,12 +55,12 @@ public class Address {
         this.state = state;
     }
 
-    public Integer getPincode() {
-        return pincode;
+    public Integer getPinCode() {
+        return pinCode;
     }
 
-    public void setPincode(Integer pincode) {
-        this.pincode = pincode;
+    public void setPinCode(Integer pinCode) {
+        this.pinCode = pinCode;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Address {
                 "addressLine='" + addressLine + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
-                ", pincode=" + pincode +
+                ", pinCode=" + pinCode +
                 '}';
     }
 }

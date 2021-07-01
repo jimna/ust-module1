@@ -23,10 +23,10 @@ public class PersonController {
     @PostMapping("/add")
     @ApiOperation("Add a Person Details")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
-    	if(service.addPerson(person).equals("person already exist")) {
-    		 return new ResponseEntity<String>("person already exist", HttpStatus.FORBIDDEN);
+    	if(service.addPerson(person).equals("Person Already Exist")) {
+    		 return new ResponseEntity<String>("Person Already Exist", HttpStatus.FORBIDDEN);
     	}
-        return new ResponseEntity<String>("created", HttpStatus.CREATED);
+        return new ResponseEntity<String>("Created", HttpStatus.CREATED);
 
     }
 
