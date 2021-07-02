@@ -23,27 +23,32 @@ public class PersonController {
     @PostMapping("/add")
     @ApiOperation("Add a Person Details")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
-        try {
-            if(service.addPerson(person)) {
-                return new ResponseEntity<String>("Created", HttpStatus.OK);
-            }
-            return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
-        } catch (UserAlreadyExistsException ae) {
-            return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
-        }
+    	if(service.addPerson(person).equals("Person Already Exist")) {
+    		 return new ResponseEntity<String>("Person Already Exist", HttpStatus.FORBIDDEN);
+    	}
+        return new ResponseEntity<String>("Created", HttpStatus.CREATED);
+
     }
 
-    @PutMapping("/manipulate")
+    @PutMapping("/manipulate/{id}/{operation}")
     @ApiOperation("Update or Delete data")
-    public ResponseEntity<?> manipulateData(@Valid @PathVariable() int id,@PathVariable() String operation){
+    public ResponseEntity<?> manipulateData( @PathVariable() Integer id,@PathVariable() String operation,@Valid @RequestBody Person person){
         try{
             if(operation.equalsIgnoreCase("delete")){
-                service.deletePerson(id);
-                return new ResponseEntity<String>("Success", HttpStatus.OK);
+                try{
+                    if(service.deletePerson(id)) {
+                        return new ResponseEntity<String>("Deleted Successfully!!!", HttpStatus.OK);
+                    }return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+                }catch(UserNotFoundException us){
+                    return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+                }
+
             }
             else if(operation.equalsIgnoreCase("update")) {
-                service.updatePerson(id);
-                return new ResponseEntity<String>("Success", HttpStatus.OK);
+                if(service.updatePerson(id, person)==null){
+                    return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+                }
+                return new ResponseEntity<String>("Successfully Updated!!!", HttpStatus.OK);
             }else{
                 return new ResponseEntity<String>("Invalid Operation", HttpStatus.NOT_ACCEPTABLE);
             }

@@ -1,14 +1,14 @@
 server:
-  port: 8082
+  port: 8081
 
 addPerson:
-  url: http://localhost:8088/person/insert
+  url: http://localhost:8082/person/insert
 
 findPerson:
-  url: http://localhost:8088/person/{id}
+  url: http://localhost:8082/person/
 
 updatePerson:
-  url: http://localhost:8088/person/update/{id}
+  url: http://localhost:8082/person/update/{id}
 
 deletePerson:
-  url: http://localhost:8088/person/delete/{id}
+  url: http://localhost:8082/person/delete/{id}

@@ -1,26 +1,16 @@
 package com.ust.person.service;
 
-import com.ust.person.exception.UserAlreadyExistsException;
 import com.ust.person.exception.UserNotFoundException;
 import com.ust.person.model.Address;
 import com.ust.person.model.Person;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
@@ -28,14 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@SpringBootTest
 class PersonServiceImplTest {
 
     @Mock
@@ -53,24 +39,14 @@ class PersonServiceImplTest {
     }
     @BeforeEach
     public void setUp() {
-        String date="12-12-1998";
-        {
-            try {
-                dob = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        person=new Person(11,"Albert","shibu", "12-12-1998",address,"12-12-21");
+
         }
-
-        Address add=new Address("MG Road","Banglore","Karnataka",123456);
-        person=new Person(11,"Albert","shibu",dob,address);
-
-    }
 
     @Test
     void addPersonTest(){
             if (person.getId() == 11) {
-                when(restTemplate.getForEntity("http://localhost:8088/person/{id}", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
+                when(restTemplate.getForEntity("http://localhost:8088/person/11", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
             } else {
                 when(restTemplate.getForEntity("http://localhost:8088/person/insert", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.OK));
             }
@@ -80,19 +56,26 @@ class PersonServiceImplTest {
     }
      @Test
      void updatePerson() throws UserNotFoundException {
-             when(restTemplate.getForEntity("http://localhost:8088/person/update/{id}", Person.class)).thenReturn(new ResponseEntity(true ,HttpStatus.OK));
+         if (person.getId() == 11) {
+             when(restTemplate.getForEntity("http://localhost:8088/person/11", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
+         } else {
+             when(restTemplate.getForEntity("http://localhost:8082/person/11/update", Person.class)).thenReturn(new ResponseEntity(true, HttpStatus.OK));
              person.setLastName("Ramesh");
-             boolean fetchPerson = service.updatePerson(11);
-             Assert.assertEquals(fetchPerson , true);
-
+             Person fetchPerson = service.updatePerson(11, person);
+             Assert.assertEquals(fetchPerson, person);
+         }
      }
 
     @Test
     void deletePerson() throws UserNotFoundException {
-            when(restTemplate.getForEntity("http://localhost:8088/person/delete/{id}", Person.class)).thenReturn(new ResponseEntity(true ,HttpStatus.OK)).thenThrow(NullPointerException.class);
+        if (person.getId() == 11) {
+            when(restTemplate.getForEntity("http://localhost:8088/person/11", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
+        } else {
+            when(restTemplate.getForEntity("http://localhost:8082/person/11/delete", Person.class)).thenReturn(new ResponseEntity(true, HttpStatus.OK));
             boolean fetchPerson = service.deletePerson(11);
-            Assert.assertEquals(fetchPerson , true);
+            Assert.assertEquals(fetchPerson, true);
 
+        }
     }
 
 

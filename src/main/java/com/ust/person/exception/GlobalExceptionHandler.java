@@ -21,14 +21,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> userNotFoundException(UserNotFoundException exception, WebRequest request){
         ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), "Person Not Found", request.getDescription(false));
+                new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<?> userAlreadyExistsException(UserAlreadyExistsException exception, WebRequest request){
         ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), "Person Already Exists", request.getDescription(false));
+                new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
