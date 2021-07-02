@@ -1,4 +1,4 @@
-package com.ust.person.controller;
+     package com.ust.person.controller;
 
 import com.ust.person.exception.UserAlreadyExistsException;
 import com.ust.person.exception.UserNotFoundException;
@@ -23,25 +23,31 @@ public class PersonController {
     @PostMapping("/add")
     public ResponseEntity<?> addPerson(@Valid @RequestBody Person person) throws UserAlreadyExistsException {
     	
-        try {
-        	System.out.println("conadd");
-            service.addPerson(person);
-            return new ResponseEntity<String>("Person Created", HttpStatus.OK);
-        } catch (UserAlreadyExistsException ae) {
-            return new ResponseEntity<String>("User Already Exists", HttpStatus.FORBIDDEN);
-        }
-    }
+    	if(service.addPerson(person).equals("person already exist")) {
+   		 return new ResponseEntity<String>("person already exist", HttpStatus.FORBIDDEN);
+   	}
+       return new ResponseEntity<String>("created", HttpStatus.CREATED);
 
+   }
+    
+   // @RequestBody Person person,
     @PutMapping("/manipulate/{id}/{operation}")
-    public ResponseEntity<?> manipulateData(@Valid @RequestBody Person person, @PathVariable() Integer id,@PathVariable() String operation){
-    	System.out.println("condel");
+    public ResponseEntity<?> manipulateData(@Valid @RequestBody Person person,  @PathVariable() Integer id,@PathVariable() String operation){
     	   try{
                if(operation.equalsIgnoreCase("delete")){
-                   service.deletePerson(id);
-                   return new ResponseEntity<String>("Deleted Successfully", HttpStatus.OK);
+            	   try {
+            		   if(service.deletePerson(id)) {
+            			   return new ResponseEntity<String>("Deleted Successfully", HttpStatus.OK);
+            		   }return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+            	   }catch (UserNotFoundException e) {
+            		   return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+				}           
                }
                else if(operation.equalsIgnoreCase("update")) {
-                   service.updatePerson(person, id);
+                   if((service.updatePerson(person, id))==null)
+                   {
+                	   return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
+                   } 
                    return new ResponseEntity<String>("Updated", HttpStatus.OK);
                }else{
                    return new ResponseEntity<String>("Invalid Operation", HttpStatus.NOT_ACCEPTABLE);

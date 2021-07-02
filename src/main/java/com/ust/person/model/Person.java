@@ -1,12 +1,13 @@
 package com.ust.person.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Person {
 	@NotNull(message = "id is mandatory")
@@ -18,30 +19,35 @@ public class Person {
 	@Size(max = 250)
 	private String lastName;
 	@NotNull(message = "date of birth is mandatory")
-	@JsonFormat(pattern = "dd-mm-yyyy")
-	private Date dateOfBirth;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private String dateOfBirth;
 	@NotNull(message = "address is mandatory")
+	@Valid
 	private List<Address> address;
 	@NotNull
-	@JsonFormat(pattern = "dd-mm-yyyy")
-	private Date creationDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yy")
+	private String createdDate;
 
 	public Person() {
 	}
 
+	
+
 	public Person(@NotNull(message = "id is mandatory") Integer id,
 			@NotEmpty(message = "firstName is mandatory") @Size(max = 250) String firstName,
 			@NotEmpty(message = "lastName is mandatory") @Size(max = 250) String lastName,
-			@NotNull(message = "date of birth is mandatory") Date dateOfBirth,
-			@NotNull(message = "address is mandatory") List<Address> address, @NotNull Date creationDate) {
+			@NotNull(message = "date of birth is mandatory") String dateOfBirth,
+			@NotNull(message = "address is mandatory") @Valid List<Address> address, @NotNull String createdDate) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
 		this.address = address;
-		this.creationDate = creationDate;
+		this.createdDate = createdDate;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -67,13 +73,7 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+	
 
 	public List<Address> getAddress() {
 		return address;
@@ -83,18 +83,39 @@ public class Person {
 		this.address = address;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
+
+
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+
+
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
+
+
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
-				+ dateOfBirth + ", address=" + address + ", creationDate=" + creationDate + "]";
+				+ dateOfBirth + ", address=" + address + ", createdDate=" + createdDate + "]";
 	}
 
+
+
+	
 }
