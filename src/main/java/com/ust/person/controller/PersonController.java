@@ -37,7 +37,7 @@ public class PersonController {
             if(operation.equalsIgnoreCase("delete")){
                 try{
                     if(service.deletePerson(id)) {
-                        return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+                        return new ResponseEntity<String>("Deleted Successfully!!!", HttpStatus.OK);
                     }return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
                 }catch(UserNotFoundException us){
                     return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class PersonController {
                 if(service.updatePerson(id, person)==null){
                     return new ResponseEntity<String>("Person Not Found", HttpStatus.NOT_FOUND);
                 }
-                return new ResponseEntity<String>("Success Updated", HttpStatus.OK);
+                return new ResponseEntity<String>("Successfully Updated!!!", HttpStatus.OK);
             }else{
                 return new ResponseEntity<String>("Invalid Operation", HttpStatus.NOT_ACCEPTABLE);
             }

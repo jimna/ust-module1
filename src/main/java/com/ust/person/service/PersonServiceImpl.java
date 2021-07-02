@@ -35,7 +35,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public String addPerson(Person person) throws UserAlreadyExistsException {
-		RestTemplate restTemplate = new RestTemplate();
+//		RestTemplate restTemplate = new RestTemplate();
 		RestTemplate restTemplate1 = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		String body = "{}";
@@ -93,8 +93,6 @@ public class PersonServiceImpl implements PersonService {
 		if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
 			restTemplate.put(UPDATE_PERSON_BY_ID, person, params);
 			return person;
-		}else if(responseEntity.getStatusCode() == HttpStatus.OK){
-			return null;
 		}
 		return null;
 	}

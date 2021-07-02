@@ -56,19 +56,26 @@ class PersonServiceImplTest {
     }
      @Test
      void updatePerson() throws UserNotFoundException {
-             when(restTemplate.getForEntity("http://localhost:8088/person/11/update", Person.class)).thenReturn(new ResponseEntity(true ,HttpStatus.OK));
+         if (person.getId() == 11) {
+             when(restTemplate.getForEntity("http://localhost:8088/person/11", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
+         } else {
+             when(restTemplate.getForEntity("http://localhost:8082/person/11/update", Person.class)).thenReturn(new ResponseEntity(true, HttpStatus.OK));
              person.setLastName("Ramesh");
-             Person fetchPerson = service.updatePerson(11,person);
-             Assert.assertEquals(fetchPerson , person);
-
+             Person fetchPerson = service.updatePerson(11, person);
+             Assert.assertEquals(fetchPerson, person);
+         }
      }
 
     @Test
     void deletePerson() throws UserNotFoundException {
-            when(restTemplate.getForEntity("http://localhost:8088/person/delete/11/delete", Person.class)).thenReturn(new ResponseEntity(true ,HttpStatus.OK));
+        if (person.getId() == 11) {
+            when(restTemplate.getForEntity("http://localhost:8088/person/11", Person.class)).thenReturn(new ResponseEntity(person, HttpStatus.FORBIDDEN));
+        } else {
+            when(restTemplate.getForEntity("http://localhost:8082/person/11/delete", Person.class)).thenReturn(new ResponseEntity(true, HttpStatus.OK));
             boolean fetchPerson = service.deletePerson(11);
-            Assert.assertEquals(fetchPerson , true);
+            Assert.assertEquals(fetchPerson, true);
 
+        }
     }
 
 

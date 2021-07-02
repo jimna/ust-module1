@@ -59,11 +59,19 @@ class PersonControllerTest {
 
     @Test
     void deleteDataTest() throws Exception {
-
         when(service.deletePerson(person.getId())).thenReturn(true);
         mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/delete").contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    void updateDataTest() throws Exception {
+        when(service.updatePerson(person.getId(), person)).thenReturn(person);
+        mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/update").contentType(MediaType.APPLICATION_JSON)
+                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
     @Test
     void deleteDataFailureTest() throws Exception {
         when(service.deletePerson(person.getId())).thenReturn(false);
@@ -71,14 +79,31 @@ class PersonControllerTest {
                 .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
-    @Test
-    void updateDataFailureTest() throws Exception {
-        when(service.updatePerson(person.getId(), person)).thenReturn(person);
-        mock.perform(MockMvcRequestBuilders.put("/api/person/manipulate/11/update").contentType(MediaType.APPLICATION_JSON)
-                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isNotFound());
 
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -98,9 +123,8 @@ class PersonControllerTest {
 //    @Test
 //    void addPersonTest() throws Exception {
 //        //person=new Person(11,"Albert","shibu", "12-12-1998",address,"12-12-21");
-//        when(service.addPerson(person)).thenReturn("Created");
+//        when(service.addPerson(person)).thenReturn("Person Already Exist");
 //        mock.perform(MockMvcRequestBuilders.post("/api/person/add").contentType(MediaType.APPLICATION_JSON)
 //                .content(new Gson().toJson(person))).andExpect(MockMvcResultMatchers.status().isCreated());
 //
 //    }
-
