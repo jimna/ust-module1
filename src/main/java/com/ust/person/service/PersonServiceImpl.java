@@ -5,16 +5,15 @@ import com.ust.person.exception.UserNotFoundException;
 import com.ust.person.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,12 +29,16 @@ public class PersonServiceImpl implements PersonService {
 	@Value("${findPerson.url}")
 	private String FIND_PERSON_BY_ID;
 
-	@Autowired
 	RestTemplate restTemplate;
+
+	@Autowired
+	public void UserServiceImpl(RestTemplateBuilder restTemplateBuilder) {
+		restTemplate = restTemplateBuilder.build();
+	}
 
 	@Override
 	public String addPerson(Person person) throws UserAlreadyExistsException {
-//		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate();
 		RestTemplate restTemplate1 = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		String body = "{}";
@@ -57,6 +60,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public boolean deletePerson(Integer id) throws UserNotFoundException {
+		RestTemplate restTemplate = new RestTemplate();
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", id);
 		RestTemplate restTemplate1 = new RestTemplate();
@@ -71,14 +75,13 @@ public class PersonServiceImpl implements PersonService {
 		if (responseEntity.getStatusCode() == HttpStatus.ALREADY_REPORTED) {
 			restTemplate.put(DELETE_PERSON_BY_ID, Person.class, params);
 			return true;
-		}else if(responseEntity.getStatusCode() == HttpStatus.OK){
-			return false;
 		}
 		return false;
 	}
 
 	@Override
 	public Person updatePerson(Integer id, Person person) throws UserNotFoundException {
+		RestTemplate restTemplate = new RestTemplate();
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("id", id);
 		RestTemplate restTemplate1 = new RestTemplate();
